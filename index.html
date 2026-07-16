@@ -40,6 +40,7 @@
           <li><a href="#metodologia">Metodologia</a></li>
           <li><a href="#areas">Áreas</a></li>
           <li><a href="#equipe">Equipe</a></li>
+          <li><a href="#ai-chat-widget" onclick="document.getElementById('ai-chat-window').style.display = 'flex'">Tutor IA</a></li>
           <li><a href="materials.html">Materiais</a></li>
           <li><a href="#agendar" class="btn-cta">Agendar</a></li>
         </ul>
@@ -474,6 +475,65 @@
   <!-- importando JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script src="assets/script.js"></script>
+<!-- ========================================== -->
+<!-- INTERFACE DA IA DE APOIO (TUTOR VIRTUAL)  -->
+<!-- ========================================== -->
+<div id="ai-chat-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+    
+    <!-- Botão Flutuante (Círculo Azul) para Abrir o Chat -->
+    <button id="ai-chat-btn" style="background: #0066cc; color: white; border: none; width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.25); cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;">
+        <i class="fas fa-comments"></i>
+    </button>
 
+    <!-- Janela do Chat (Inicia Oculta) -->
+    <div id="ai-chat-window" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 360px; height: 480px; background: white; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); flex-direction: column; overflow: hidden; font-family: sans-serif;">
+        
+        <!-- Cabeçalho do Chat -->
+        <div style="background: #0066cc; color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-robot"></i> 
+                <span>Tutor Virtual MPROVA</span>
+            </div>
+            <button id="ai-close-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px; line-height: 1;">&times;</button>
+        </div>
+        
+        <!-- Corpo do Chat (Onde ficam as mensagens) -->
+        <div style="flex: 1; padding: 16px; overflow-y: auto; background: #f8f9fa; font-size: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #e9ecef; color: #333; padding: 12px; border-radius: 12px; border-top-left-radius: 2px; max-width: 85%; align-self: flex-start; line-height: 1.4;">
+                Olá! Sou o assistente de IA do MPROVA. Como posso te ajudar com as questões e conteúdos hoje?
+            </div>
+        </div>
+        
+        <!-- Campo de Texto para Enviar Mensagem -->
+        <div style="padding: 12px; border-top: 1px solid #eee; display: flex; background: white; gap: 8px;">
+            <input type="text" placeholder="Digite sua dúvida aqui..." style="flex: 1; padding: 10px; border: 1px solid #ced4da; border-radius: 8px; outline: none; font-size: 14px;">
+            <button style="background: #0066cc; color: white; border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Seleção dos elementos do HTML
+    const chatBtn = document.getElementById('ai-chat-btn');
+    const chatWindow = document.getElementById('ai-chat-window');
+    const closeBtn = document.getElementById('ai-close-btn');
+
+    // Abre e fecha ao clicar no botão circular flutuante
+    chatBtn.addEventListener('click', () => {
+        if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+            chatWindow.style.display = 'flex';
+        } else {
+            chatWindow.style.display = 'none';
+        }
+    });
+
+    // Fecha a janela ao clicar no "X" do topo
+    closeBtn.addEventListener('click', () => {
+        chatWindow.style.display = 'none';
+    });
+</script>
+<!-- ========================================== -->
 </body>
 </html>
