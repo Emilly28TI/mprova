@@ -1,21 +1,21 @@
 const chatMessages = document.getElementById('chatMessages');
 
-// 1. Mensagens pulando uma por uma ao carregar a página
+// 1. Mensagens pulando uma por uma de forma limpa na tela ao iniciar
 window.onload = function() {
     if (chatMessages) {
-        chatMessages.innerHTML = ''; // Limpa o chat para iniciar do zero
+        chatMessages.innerHTML = ''; 
         
-        // Primeiro pula a mensagem de saudação
+        // Pula a saudação primeiro
         setTimeout(() => {
             appendMessage("Olá! Seja bem-vindo(a) ao MPROVA!🚀 Serei seu assistente IA nessa jornada. Como posso te ajudar hoje?", 'bot-message');
             
-            // Depois de 1.2 segundos, pulam os botões de opções logo abaixo
+            // Depois de 1.2 segundos, pulam as opções estilo WhatsApp abaixo dela
             setTimeout(mostrarBotoesOpcoes, 1200);
         }, 500);
     }
 };
 
-// Formato de balão redondo azul injetado direto via JavaScript
+// Formato de balão redondo azul embutido direto
 function appendMessage(text, className) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${className}`;
@@ -45,7 +45,7 @@ function mostrarBotoesOpcoes() {
 
     const optionsDiv = document.createElement('div');
     optionsDiv.id = 'currentOptions';
-    optionsDiv.style.cssText = 'display: flex; flex-direction: column; gap: 8px; margin: 10px 0; max-width: 80%; animation: fadeInUp 0.4s ease;';
+    optionsDiv.style.cssText = 'display: flex; flex-direction: column; gap: 8px; margin: 10px 0; max-width: 80%;';
 
     optionsDiv.innerHTML = `
         <button class="option-btn" style="background:#fff; border:1px solid #007bff; color:#007bff; padding:10px 14px; border-radius:20px; cursor:pointer; text-align:left; font-weight:600; font-size:13px; transition: 0.2s;" onclick="selectOption('📋 Gerar meu Plano de Estudos')">📋 Gerar meu Plano de Estudos</button>
@@ -57,7 +57,7 @@ function mostrarBotoesOpcoes() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Mensagens enviadas uma atrás da outra continuamente
+// Mantém as mensagens se acumulando continuamente uma atrás da outra
 function selectOption(optionText) {
     const antigo = document.getElementById('currentOptions');
     if (antigo) {
@@ -73,7 +73,7 @@ function selectOption(optionText) {
     setTimeout(() => { processAIResponse(optionText); }, 1000);
 }
 
-// Consegue enviar o texto digitado na caixa de mensagens livre
+// CONSEGUE ENVIAR TEXTO DIGITADO LIVRE NA CAIXA DE MENSAGENS
 function sendUserMessage() {
     const input = document.getElementById('userInput');
     if (!input) return;
@@ -90,7 +90,6 @@ function sendUserMessage() {
     setTimeout(() => { processAIResponse(text); }, 1000);
 }
 
-// Responder apenas coisas limitadas ao escopo do site
 function processAIResponse(userInputText) {
     const query = userInputText.toLowerCase();
     let responseText = "";
@@ -111,7 +110,5 @@ function processAIResponse(userInputText) {
     }
 
     appendMessage(responseText, 'bot-message');
-    
-    // Pula um novo bloco de opções após a resposta
     setTimeout(mostrarBotoesOpcoes, 1000);
 }
