@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MProva - Inteligência Artificial</title>
+    <!-- Substitua pelo caminho real do seu arquivo CSS principal se necessário -->
+    <link rel="stylesheet" href="assets/css/style.css"> 
+</head>
+<body>
+
+    <!-- Menu de Navegação Integrado -->
+    <header>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="materials.html">Materiais</a>
+            <a href="ia.html" class="active">Área da IA</a>
+        </nav>
+    </header>
+
+    <!-- Container Principal da Interface da IA -->
+    <main class="ia-container">
+        <h1>Assistente de Estudos IA</h1>
+        <p>Insira suas dúvidas ou peça seu plano de estudos personalizado abaixo:</p>
+        
+        <div class="chat-window">
+            <!-- Espaço onde as mensagens da IA e do usuário vão aparecer -->
+            <div class="chat-messages" id="chatMessages">
+                <p class="bot-message">Olá! Como posso te ajudar com seus estudos hoje?</p>
+            </div>
+            
+            <!-- Campo de input e envio -->
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem aqui...">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Insira o link para o seu script JavaScript que gerencia as respostas da IA -->
+    <script src="assets/js/ia-script.js"></script>
+</body>
+</html>
