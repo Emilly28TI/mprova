@@ -4,40 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MProva - Inteligência Artificial</title>
-    <!-- Substitua pelo caminho real do seu arquivo CSS principal se necessário -->
     <link rel="stylesheet" href="assets/css/style.css"> 
+    <style>
+        .ia-container { max-width: 600px; margin: 40px auto; padding: 20px; font-family: sans-serif; }
+        .chat-window { border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; padding: 15px; }
+        .chat-messages { height: 300px; overflow-y: auto; margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 4px; border: 1px solid #eee; display: flex; flex-direction: column; }
+        .message { margin-bottom: 12px; padding: 8px 12px; border-radius: 6px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+        .bot-message { background: #e2f0d9; align-self: flex-start; margin-right: auto; }
+        .user-message { background: #007bff; color: #fff; align-self: flex-end; margin-left: auto; text-align: left; }
+        
+        .quick-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .option-btn { background: #fff; border: 1px solid #007bff; color: #007bff; padding: 10px; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; transition: 0.2s; }
+        .option-btn:hover { background: #007bff; color: #fff; }
+        
+        .chat-input-area { display: flex; gap: 8px; }
+        .chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .chat-input-area button { padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
 </head>
 <body>
 
-    <!-- Menu de Navegação Integrado -->
     <header>
         <nav>
             <a href="index.html">Início</a>
             <a href="materials.html">Materiais</a>
-            <a href="ia.html" class="active">Área da IA</a>
+            <a href="ia.html" style="font-weight: bold; border-bottom: 2px solid #007bff;">Área da IA</a>
         </nav>
     </header>
 
-    <!-- Container Principal da Interface da IA -->
     <main class="ia-container">
         <h1>Assistente de Estudos IA</h1>
-        <p>Insira suas dúvidas ou peça seu plano de estudos personalizado abaixo:</p>
+        <p>Selecione uma das opções prontas abaixo ou digite sua dúvida:</p>
         
         <div class="chat-window">
-            <!-- Espaço onde as mensagens da IA e do usuário vão aparecer -->
             <div class="chat-messages" id="chatMessages">
-                <p class="bot-message">Olá! Como posso te ajudar com seus estudos hoje?</p>
+                <div class="message bot-message">Olá! Sou o assistente oficial do MProva. Como posso te ajudar com seus estudos ou navegação hoje?</div>
             </div>
             
-            <!-- Campo de input e envio -->
+            <!-- Botões de opções rápidas -->
+            <div class="quick-options" id="quickOptions">
+                <button class="option-btn" onclick="selectOption('Gerar meu Plano de Estudos')">📋 Gerar meu Plano de Estudos</button>
+                <button class="option-btn" onclick="selectOption('Ver Materiais de Apoio')">📚 Ver Materiais de Apoio disponíveis</button>
+                <button class="option-btn" onclick="selectOption('Como funciona o MProva?')">💡 Como usar o MProva?</button>
+            </div>
+            
+            <!-- Campo de input para mensagens livres -->
             <div class="chat-input-area">
-                <input type="text" id="userInput" placeholder="Digite sua mensagem aqui...">
-                <button onclick="sendMessage()">Enviar</button>
+                <input type="text" id="userInput" placeholder="Faça uma pergunta sobre o MProva...">
+                <button onclick="sendUserMessage()">Enviar</button>
             </div>
         </div>
     </main>
 
-    <!-- Insira o link para o seu script JavaScript que gerencia as respostas da IA -->
-    <script src="assets/js/ia-script.js"></script>
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Função ao clicar nos botões rápidos
+        function selectOption(optionText) {
+            document.getElementById('quickOptions').style.display = 'none';
+            appendMessage(optionText, 'user-message');
+            
+            setTimeout(() => {
+                processAIResponse(optionText);
+            }, 800);
+        }
+
+        // Função ao enviar texto livre pelo input ou pressionar Enter
+        function sendUserMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (text === '') return;
+
+            appendMessage(text, 'user-message');
+            input.value = '';
+
+            setTimeout(() => {
+                processAIResponse(text);
+            }, 800);
+        }
+
+        // Captura o clique da tecla Enter no teclado
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
+
+        function appendMessage(text, className) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${className}`;
+            msgDiv.innerText = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; 
+        }
+
+        // SISTEMA DE RESPOSTA COM FILTRO DE LIMITAÇÃO DO SITE
+        function processAIResponse(userInputText) {
+            // Converte todo o texto para minúsculo para facilitar a busca de palavras-chave
+            const query = userInputText.toLowerCase();
+            let responseText = "";
+
+            // 1. Verificação de escopo: Palavras-chave permitidas dentro do contexto do MProva
+            const keywordsContext = ['plano', 'estudo', 'material', 'mprova', 'olimpiada', 'apoio', 'ajuda', 'site', 'como funciona', 'simulado', 'cronograma', 'vestibular', 'enem'];
+            
+            // Verifica se a pergunta do usuário contém pelo menos uma palavra do contexto
+            const isInsideScope = keywordsContext.some(keyword => query.includes(keyword));
+
+            if (!isInsideScope) {
+                // RESPOSTA DE BLOQUEIO DE ESCOPO
+                responseText = "Desculpe, mas sou um assistente focado exclusivamente na plataforma MProva e em organização de estudos. Não posso responder a perguntas fora desse tema. Como posso te ajudar com seus planos ou materiais hoje?";
+            } else {
+                // RESPOSTAS DINÂMICAS BASEADAS NAS PALAVRAS-CHAVE DO SITE
+                if (query.includes('plano') || query.includes('cronograma')) {
+                    responseText = "Perfeito! Para gerar seu plano personalizado, recomendo focar nas matérias de maior peso. Você pode montar seu cronograma usando nossos guias na aba 'Materiais'. Qual o seu foco principal de estudos?";
+                } else if (query.includes('material') || query.includes('apoio') || query.includes('olimpiada')) {
+                    responseText = "Você pode acessar todos os nossos materiais de apoio, guias de olimpíadas e conteúdos focados clicando na opção 'Materiais' no menu superior do nosso site!";
+                } else if (query.includes('mprova') || query.includes('como funciona') || query.includes('site')) {
+                    responseText = "O MProva é um site desenvolvido para organizar e simplificar o estudo de alta performance, oferecendo roteiros claros, materiais de apoio e suporte inteligente para estudantes focados.";
+                } else {
+                    responseText = "Entendi sua dúvida sobre nosso ecossistema de estudos! Atualmente, nossa base de dados cobre roteiros e materiais de apoio. Você gostaria de navegar para a seção de Materiais ou criar um Cronograma?";
+                }
+            }
+
+            appendMessage(responseText, 'bot-message');
+        }
+    </script>
 </body>
 </html>
