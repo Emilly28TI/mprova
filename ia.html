@@ -59,9 +59,37 @@
     <script>
         const chatMessages = document.getElementById('chatMessages');
 
-        // Função ao clicar nos botões rápidos
+        // Cria e insere os botões de opções dinamicamente dentro do fluxo do chat
+        function mostrarBotoesOpcoes() {
+            // Cria o container dos botões
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'quick-options';
+            optionsDiv.id = 'currentOptions';
+            optionsDiv.style.cssText = 'display: flex; flex-direction: column; gap: 8px; margin: 10px 0; max-width: 80%;';
+
+            // Define os botões estilo WhatsApp
+            optionsDiv.innerHTML = `
+                <button class="option-btn" onclick="selectOption('📋 Gerar meu Plano de Estudos')">📋 Gerar meu Plano de Estudos</button>
+                <button class="option-btn" onclick="selectOption('📚 Ver Materiais de Apoio disponíveis')">📚 Ver Materiais de Apoio disponíveis</button>
+                <button class="option-btn" onclick="selectOption('💡 Como usar o MProva?')">💡 Como usar o MProva?</button>
+            `;
+
+            chatMessages.appendChild(optionsDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Executa assim que a página carrega para mostrar as opções iniciais no chat
+        window.onload = function() {
+            setTimeout(mostrarBotoesOpcoes, 500);
+        };
+
+        // Função ativada ao clicar em um dos botões do chat
         function selectOption(optionText) {
-            document.getElementById('quickOptions').style.display = 'none';
+            // Remove os botões atuais do fluxo para seguir o modelo do print
+            const currentOptions = document.getElementById('currentOptions');
+            if (currentOptions) currentOptions.remove();
+            
+            // Envia a escolha do usuário
             appendMessage(optionText, 'user-message');
             
             setTimeout(() => {
@@ -69,11 +97,15 @@
             }, 800);
         }
 
-        // Função ao enviar texto livre pelo input ou pressionar Enter
+        // Função de envio de mensagem digitada pelo usuário
         function sendUserMessage() {
             const input = document.getElementById('userInput');
             const text = input.value.trim();
             if (text === '') return;
+
+            // Se o usuário digitar algo, remove as opções que estavam abertas
+            const currentOptions = document.getElementById('currentOptions');
+            if (currentOptions) currentOptions.remove();
 
             appendMessage(text, 'user-message');
             input.value = '';
@@ -83,11 +115,9 @@
             }, 800);
         }
 
-        // Captura o clique da tecla Enter no teclado
+        // Atalho para enviar com a tecla Enter
         document.getElementById('userInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendUserMessage();
-            }
+            if (e.key === 'Enter') sendUserMessage();
         });
 
         function appendMessage(text, className) {
@@ -98,36 +128,30 @@
             chatMessages.scrollTop = chatMessages.scrollHeight; 
         }
 
-        // SISTEMA DE RESPOSTA COM FILTRO DE LIMITAÇÃO DO SITE
+        // RESPOSTA LIMITADA AO ESCOPO DO SITE MPROVA
         function processAIResponse(userInputText) {
-            // Converte todo o texto para minúsculo para facilitar a busca de palavras-chave
             const query = userInputText.toLowerCase();
             let responseText = "";
 
-            // 1. Verificação de escopo: Palavras-chave permitidas dentro do contexto do MProva
-            const keywordsContext = ['plano', 'estudo', 'material', 'mprova', 'olimpiada', 'apoio', 'ajuda', 'site', 'como funciona', 'simulado', 'cronograma', 'vestibular', 'enem'];
-            
-            // Verifica se a pergunta do usuário contém pelo menos uma palavra do contexto
+            // Palavras chaves aceitas pelo site
+            const keywordsContext = ['plano', 'estudo', 'material', 'mprova', 'olimpiada', 'apoio', 'ajuda', 'site', 'como funciona', 'cronograma'];
             const isInsideScope = keywordsContext.some(keyword => query.includes(keyword));
 
             if (!isInsideScope) {
-                // RESPOSTA DE BLOQUEIO DE ESCOPO
-                responseText = "Desculpe, mas sou um assistente focado exclusivamente na plataforma MProva e em organização de estudos. Não posso responder a perguntas fora desse tema. Como posso te ajudar com seus planos ou materiais hoje?";
+                responseText = "Desculpe, mas sou um assistente focado exclusivamente no ecossistema MProva. Não consigo responder sobre outros assuntos. Como posso te ajudar com seus estudos hoje?";
             } else {
-                // RESPOSTAS DINÂMICAS BASEADAS NAS PALAVRAS-CHAVE DO SITE
                 if (query.includes('plano') || query.includes('cronograma')) {
-                    responseText = "Perfeito! Para gerar seu plano personalizado, recomendo focar nas matérias de maior peso. Você pode montar seu cronograma usando nossos guias na aba 'Materiais'. Qual o seu foco principal de estudos?";
+                    responseText = "Perfeito! Para gerar seu plano personalizado, recomendo focar nas matérias de maior peso. Você pode montar seu cronograma usando nossos guias na aba 'Materiais'.";
                 } else if (query.includes('material') || query.includes('apoio') || query.includes('olimpiada')) {
-                    responseText = "Você pode acessar todos os nossos materiais de apoio, guias de olimpíadas e conteúdos focados clicando na opção 'Materiais' no menu superior do nosso site!";
-                } else if (query.includes('mprova') || query.includes('como funciona') || query.includes('site')) {
-                    responseText = "O MProva é um site desenvolvido para organizar e simplificar o estudo de alta performance, oferecendo roteiros claros, materiais de apoio e suporte inteligente para estudantes focados.";
+                    responseText = "Você pode acessar todos os nossos materiais de apoio e guias de olimpíadas clicando na opção 'Materiais' no menu superior!";
                 } else {
-                    responseText = "Entendi sua dúvida sobre nosso ecossistema de estudos! Atualmente, nossa base de dados cobre roteiros e materiais de apoio. Você gostaria de navegar para a seção de Materiais ou criar um Cronograma?";
+                    responseText = "O MProva é um ambiente desenvolvido para simplificar seus roteiros de estudos de alto nível. Deseja ver os materiais de apoio ou criar um plano?";
                 }
             }
 
             appendMessage(responseText, 'bot-message');
+            
+            // Após a resposta da IA, gera novos botões de contexto se o usuário quiser continuar navegando
+            setTimeout(mostrarBotoesOpcoes, 600);
         }
     </script>
-</body>
-</html>
