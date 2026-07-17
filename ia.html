@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MProva - Inteligência Artificial</title>
     <link rel="stylesheet" href="assets/css/style.css"> 
-    <style>
-        .ia-container { max-width: 600px; margin: 40px auto; padding: 20px; font-family: sans-serif; }
-        .chat-window { border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; padding: 15px; }
-        .chat-messages { height: 300px; overflow-y: auto; margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 4px; border: 1px solid #eee; display: flex; flex-direction: column; }
-        .message { margin-bottom: 12px; padding: 8px 12px; border-radius: 6px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
-        .bot-message { background: #e2f0d9; align-self: flex-start; margin-right: auto; }
-        .user-message { background: #007bff; color: #fff; align-self: flex-end; margin-left: auto; text-align: left; }
+           <style>
+        /* Transforma o assistente em uma seção normal e fixa no corpo da página, sem popup */
+        .ia-container { max-width: 800px; margin: 40px auto; padding: 20px; font-family: sans-serif; }
+        .chat-window { border: 2px solid #007bff; border-radius: 12px; background: #fff; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .chat-messages { height: 400px; overflow-y: auto; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #eee; display: flex; flex-direction: column; }
+        .message { margin-bottom: 12px; padding: 10px 16px; border-radius: 8px; max-width: 75%; line-height: 1.4; word-wrap: break-word; }
+        .bot-message { background: #e2f0d9; color: #333; align-self: flex-start; margin-right: auto; }
+        .user-message { background: #007bff; color: #fff; align-self: flex-end; margin-left: auto; }
         
-        .quick-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .option-btn { background: #fff; border: 1px solid #007bff; color: #007bff; padding: 10px; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; transition: 0.2s; }
+        /* Estilo dos botões rápidos integrados à página */
+        .quick-options { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; max-width: 100%; }
+        .option-btn { background: #fff; border: 1px solid #007bff; color: #007bff; padding: 10px 14px; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold; transition: 0.2s; }
         .option-btn:hover { background: #007bff; color: #fff; }
         
-        .chat-input-area { display: flex; gap: 8px; }
-        .chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        .chat-input-area button { padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; }
+        .chat-input-area button { padding: 12px 24px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
